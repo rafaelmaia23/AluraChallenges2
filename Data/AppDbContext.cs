@@ -21,6 +21,6 @@ public class AppDbContext : DbContext
 			.HasDefaultValueSql("NEWID()");
 	}
 
-	DbSet<Receita> Receitas { get; set; }
-	DbSet<Despesa> Despesas { get; set; }
+	public DbSet<Receita> Receitas { get; set; }
+	public DbSet<Despesa> Despesas { get; set; }
 }
