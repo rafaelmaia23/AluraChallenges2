@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AluraChallenges2.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AluraChallenges2.Data;
 
@@ -8,4 +9,13 @@ public class AppDbContext : DbContext
 	{
 
 	}
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<Receita>()
+			.Property(x => x.Id)
+			.HasDefaultValueSql("NEWID()");
+	}
+
+	DbSet<Receita> Receitas { get; set; }
 }
