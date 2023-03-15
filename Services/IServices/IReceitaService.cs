@@ -1,6 +1,9 @@
-﻿namespace AluraChallenges2.Services.IServices
+﻿using AluraChallenges2.Models.Dtos;
+using FluentResults;
+
+namespace AluraChallenges2.Services.IServices;
+
+public interface IReceitaService
 {
-    public interface IReceitaService
-    {
-    }
+    Task<Result<ReadReceitaDto>> PostReceitaAsync(UpsertReceitaDto upsertReceitaDto);
 }
