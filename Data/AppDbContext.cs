@@ -15,7 +15,12 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Receita>()
 			.Property(x => x.Id)
 			.HasDefaultValueSql("NEWID()");
+
+		modelBuilder.Entity<Despesa>()
+			.Property(x => x.Id)
+			.HasDefaultValueSql("NEWID()");
 	}
 
 	DbSet<Receita> Receitas { get; set; }
+	DbSet<Despesa> Despesas { get; set; }
 }
