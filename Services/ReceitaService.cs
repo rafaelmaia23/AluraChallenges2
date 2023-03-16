@@ -19,6 +19,14 @@ public class ReceitaService : IReceitaService
         _mapper = mapper;
     }
 
+    public async Task<Result<ReadReceitaDto>> GetReceitaByIdAsync(string id)
+    {
+        Receita? receita = await _appDbContext.Receitas.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        if (receita == null) return Result.Fail("Not Found");
+        ReadReceitaDto readReceitaDto = _mapper.Map<ReadReceitaDto>(receita);
+        return Result.Ok(readReceitaDto);
+    }
+
     public async Task<Result<List<ReadReceitaDto>>> GetReceitasAsync()
     {
         List<Receita> receitas = await _appDbContext.Receitas.ToListAsync();
