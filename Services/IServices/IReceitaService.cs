@@ -8,4 +8,5 @@ public interface IReceitaService
     Task<Result<ReadReceitaDto>> GetReceitaByIdAsync(string id);
     Task<Result<List<ReadReceitaDto>>> GetReceitasAsync();
     Task<Result<ReadReceitaDto>> PostReceitaAsync(UpsertReceitaDto upsertReceitaDto);
+    Task<Result> PutReceitaAsync(UpsertReceitaDto upsertReceitaDto, string id);
 }

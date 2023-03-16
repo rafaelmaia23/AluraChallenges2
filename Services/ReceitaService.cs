@@ -37,22 +37,38 @@ public class ReceitaService : IReceitaService
 
     public async Task<Result<ReadReceitaDto>> PostReceitaAsync(UpsertReceitaDto upsertReceitaDto)
     {        
-        if (await IsDuplicated(upsertReceitaDto))
+        Receita receita = _mapper.Map<Receita>(upsertReceitaDto);
+        if (await IsDuplicated(receita))
         {
             return Result.Fail("Entrada duplicada");
         }
-        Receita receita = _mapper.Map<Receita>(upsertReceitaDto);
         await _appDbContext.Receitas.AddAsync(receita);
         await _appDbContext.SaveChangesAsync();
         ReadReceitaDto readReceitaDto = _mapper.Map<ReadReceitaDto>(receita);
         return Result.Ok(readReceitaDto);
     }
 
-    private async Task<bool> IsDuplicated(UpsertReceitaDto upsertReceitaDto)
+    public async Task<Result> PutReceitaAsync(UpsertReceitaDto upsertReceitaDto, string id)
     {
-        return await _appDbContext.Receitas.AnyAsync(x =>
-            x.Data.Year == upsertReceitaDto.Data.Year
-            & x.Data.Month == upsertReceitaDto.Data.Month
-            & x.Descricao == upsertReceitaDto.Descricao);
+        Receita? receita = await _appDbContext.Receitas.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        if (receita == null) return Result.Fail($"Receita de id {id} Not Found");
+        _mapper.Map(upsertReceitaDto, receita);
+        if (await IsDuplicated(receita))
+        {
+            return Result.Fail("Entrada duplicada");
+        }
+        _appDbContext.Receitas.Update(receita);
+        await _appDbContext.SaveChangesAsync();
+        return Result.Ok();
+    }
+
+    private async Task<bool> IsDuplicated(Receita receita)
+    {
+        List<Receita> receitas = await _appDbContext.Receitas.ToListAsync();
+        receitas.Remove(receita);
+        return receitas.Any(x =>
+            x.Data.Year == receita.Data.Year
+            & x.Data.Month == receita.Data.Month
+            & x.Descricao == receita.Descricao);
     }
 }

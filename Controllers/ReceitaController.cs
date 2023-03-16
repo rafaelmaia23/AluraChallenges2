@@ -41,4 +41,11 @@ public class ReceitaController : ControllerBase
         return Ok(result.Value);
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutReceitaAsync(UpsertReceitaDto upsertReceitaDto, string id)
+    {
+        Result result = await _receitaService.PutReceitaAsync(upsertReceitaDto, id);
+        if (result.IsFailed) return BadRequest(result.Reasons);
+        return Ok();
+    }
 }
