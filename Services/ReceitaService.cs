@@ -19,6 +19,14 @@ public class ReceitaService : IReceitaService
         _mapper = mapper;
     }
 
+    public async Task<Result<List<ReadReceitaDto>>> GetReceitas()
+    {
+        List<Receita> receitas = await _appDbContext.Receitas.ToListAsync();
+        if (receitas.Count == 0) return Result.Fail("Not Found");
+        List<ReadReceitaDto> readReceitaDtos = _mapper.Map<List<ReadReceitaDto>>(receitas);
+        return Result.Ok(readReceitaDtos);
+    }
+
     public async Task<Result<ReadReceitaDto>> PostReceitaAsync(UpsertReceitaDto upsertReceitaDto)
     {        
         if (await IsDuplicated(upsertReceitaDto))

@@ -23,4 +23,12 @@ public class ReceitaController : ControllerBase
         if (result.IsFailed) return BadRequest(result.Reasons);
         return Ok(result.Value);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetReceitas()
+    {
+        Result<List<ReadReceitaDto>> result = await _receitaService.GetReceitas();
+        if (result.IsFailed) return NotFound();
+        return Ok(result.Value);
+    }
 }
