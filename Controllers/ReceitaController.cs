@@ -21,7 +21,7 @@ public class ReceitaController : ControllerBase
     {
         Result<ReadReceitaDto> result = await _receitaService.PostReceitaAsync(upsertReceitaDto);
         if (result.IsFailed) return BadRequest(result.Reasons);
-        return Ok(result.Value);
+        return CreatedAtAction(nameof(GetReceitaByIdAsync), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpGet]
@@ -33,10 +33,12 @@ public class ReceitaController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ActionName("GetReceitaByIdAsync")]
     public async Task<IActionResult> GetReceitaByIdAsync(string id)
     {
         Result<ReadReceitaDto> result = await _receitaService.GetReceitaByIdAsync(id);
         if (result.IsFailed) return NotFound();
         return Ok(result.Value);
     }
+
 }
