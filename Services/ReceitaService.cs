@@ -19,7 +19,7 @@ public class ReceitaService : IReceitaService
         _mapper = mapper;
     }
 
-    public async Task<Result<List<ReadReceitaDto>>> GetReceitas()
+    public async Task<Result<List<ReadReceitaDto>>> GetReceitasAsync()
     {
         List<Receita> receitas = await _appDbContext.Receitas.ToListAsync();
         if (receitas.Count == 0) return Result.Fail("Not Found");
