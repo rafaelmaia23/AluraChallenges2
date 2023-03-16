@@ -19,6 +19,15 @@ public class ReceitaService : IReceitaService
         _mapper = mapper;
     }
 
+    public async Task<Result> DeleteReceitaAsync(string id)
+    {
+        Receita? receita = await _appDbContext.Receitas.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        if (receita == null) return Result.Fail("Not Found");
+        _appDbContext.Receitas.Remove(receita);
+        await _appDbContext.SaveChangesAsync();
+        return Result.Ok();
+    }
+
     public async Task<Result<ReadReceitaDto>> GetReceitaByIdAsync(string id)
     {
         Receita? receita = await _appDbContext.Receitas.FirstOrDefaultAsync(x => x.Id.ToString() == id);

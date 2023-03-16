@@ -48,4 +48,12 @@ public class ReceitaController : ControllerBase
         if (result.IsFailed) return BadRequest(result.Reasons);
         return Ok();
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteReceitaAsync(string id)
+    {
+        Result result = await _receitaService.DeleteReceitaAsync(id);
+        if (result.IsFailed) return NotFound();
+        return Ok();
+    }
 }
