@@ -9,5 +9,6 @@ public class Categoria
     public int Id { get; set; }
     [Required]
     public string Name { get; set; }
+    public List<Despesa> Despesas { get; set; }
 
 }
