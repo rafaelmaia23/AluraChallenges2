@@ -23,4 +23,5 @@ public class AppDbContext : DbContext
 
 	public DbSet<Receita> Receitas { get; set; }
 	public DbSet<Despesa> Despesas { get; set; }
+	public DbSet<Categoria> Categorias { get; set; }
 }
