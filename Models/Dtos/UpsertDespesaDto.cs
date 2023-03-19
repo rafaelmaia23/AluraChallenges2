@@ -6,6 +6,7 @@ public class UpsertDespesaDto
 {
     [Required]
     public string Descricao { get; set; }
+    public Categoria Categoria { get; set; }
     [Required]
     public double Valor { get; set; }
     [Required]

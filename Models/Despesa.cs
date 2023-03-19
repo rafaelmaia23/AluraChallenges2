@@ -9,6 +9,7 @@ public class Despesa
     public Guid Id { get; set; }
     [Required]
     public string Descricao { get; set; }
+    public Categoria Categoria { get; set; }
     [Required]
     public double Valor { get; set; }
     [Required]
