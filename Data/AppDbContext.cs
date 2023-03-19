@@ -12,6 +12,11 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
+		modelBuilder.Entity<Despesa>()
+			.HasOne(d => d.Categoria)
+			.WithMany(c => c.Despesas)
+			.HasForeignKey(d => d.CategoriaId);
+
 		modelBuilder.Entity<Receita>()
 			.Property(x => x.Id)
 			.HasDefaultValueSql("NEWID()");
