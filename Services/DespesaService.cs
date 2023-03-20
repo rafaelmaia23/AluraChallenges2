@@ -30,7 +30,7 @@ public class DespesaService : IDespesaService
 
     public async Task<Result<ReadDespesaDto>> GetDespesaByIdAsync(string id)
     {
-        Despesa? despesa = await _appDbContext.Despesas.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        Despesa? despesa = await _appDbContext.Despesas.Include(d => d.Categoria).FirstOrDefaultAsync(x => x.Id.ToString() == id);
         if (despesa == null) return Result.Fail("Not Found");
         ReadDespesaDto readDespesaDto = _mapper.Map<ReadDespesaDto>(despesa);
         return Result.Ok(readDespesaDto);
@@ -38,7 +38,7 @@ public class DespesaService : IDespesaService
 
     public async Task<Result<List<ReadDespesaDto>>> GetDespesasAsync()
     {
-        List<Despesa> despesas = await _appDbContext.Despesas.ToListAsync();
+        List<Despesa> despesas = await _appDbContext.Despesas.Include(d => d.Categoria).ToListAsync();
         if (despesas.Count == 0) return Result.Fail("Not Found");
         List<ReadDespesaDto> readDespesaDtos = _mapper.Map<List<ReadDespesaDto>>(despesas);
         return Result.Ok(readDespesaDtos);
@@ -47,6 +47,11 @@ public class DespesaService : IDespesaService
     public async Task<Result<ReadDespesaDto>> PostDespesaAsync(UpsertDespesaDto upsertDespesaDto)
     {
         Despesa despesa = _mapper.Map<Despesa>(upsertDespesaDto);
+        if (despesa.CategoriaId > _appDbContext.Categorias.Count() || despesa.CategoriaId < 0) 
+        {
+            return Result.Fail("Categoria Not Found");
+        }
+        if(despesa.CategoriaId == 0) despesa.CategoriaId = 1;
         if (await IsDuplicated(despesa))
         {
             return Result.Fail("Entrada duplicada");
