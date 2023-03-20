@@ -24,9 +24,23 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Despesa>()
 			.Property(x => x.Id)
 			.HasDefaultValueSql("NEWID()");
+
+		List<string> categorias = new List<string>
+		{
+			"Outras", "Alimentação", "Saúde", "Moradia", "Transporte", "Educação", "Lazer", "Imprevistos"
+		};
+		for (int i = 1; i <= categorias.Count; i++)
+		{
+			modelBuilder.Entity<Categoria>()
+				.HasData(new Categoria
+				{
+					Id = i,
+					Name = categorias[i - 1]
+				});
+		}
 	}
 
-	public DbSet<Receita> Receitas { get; set; }
+    public DbSet<Receita> Receitas { get; set; }
 	public DbSet<Despesa> Despesas { get; set; }
 	public DbSet<Categoria> Categorias { get; set; }
 }
