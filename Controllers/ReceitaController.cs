@@ -43,10 +43,10 @@ public class ReceitaController : ControllerBase
     }
 
     [HttpGet("{ano}/{mes}")]
-    public async Task<IActionResult> GetReceitasByMonth(int ano, [Range(1,12)]int mes)
+    public async Task<IActionResult> GetReceitasByMonthAsync(int ano, [Range(1,12)]int mes)
     {
         if (ano < 1990 || ano > DateTime.Now.Year) return BadRequest("Ano inválido");
-        Result<List<ReadReceitaDto>> result = await _receitaService.GetReceitasByMonth(ano, mes);
+        Result<List<ReadReceitaDto>> result = await _receitaService.GetReceitasByMonthAsync(ano, mes);
         if (result.IsFailed) return NotFound();
         return Ok(result.Value);
     }

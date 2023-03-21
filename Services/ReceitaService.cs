@@ -49,7 +49,7 @@ public class ReceitaService : IReceitaService
         return Result.Ok(readReceitaDtos);
     }
 
-    public async Task<Result<List<ReadReceitaDto>>> GetReceitasByMonth(int ano, int mes)
+    public async Task<Result<List<ReadReceitaDto>>> GetReceitasByMonthAsync(int ano, int mes)
     {
         List<Receita> receitas = await _appDbContext.Receitas
             .Where(r => r.Data.Year == ano && r.Data.Month == mes).ToListAsync();
