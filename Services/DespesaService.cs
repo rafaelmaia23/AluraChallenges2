@@ -50,6 +50,17 @@ public class DespesaService : IDespesaService
         return Result.Ok(readDespesaDtos);
     }
 
+    public async Task<Result<List<ReadDespesaDto>>> GetDespesasByMonthAsync(int ano, int mes)
+    {
+        List<Despesa> despesas = await _appDbContext.Despesas
+            .Where(d => d.Data.Year == ano && d.Data.Month == mes)
+            .Include(d => d.Categoria)
+            .ToListAsync();
+        if (despesas.Count == 0) return Result.Fail("Not Found");
+        List<ReadDespesaDto> readDespesaDtos = _mapper.Map<List<ReadDespesaDto>>(despesas);
+        return Result.Ok(readDespesaDtos);
+    }
+
     public async Task<Result<ReadDespesaDto>> PostDespesaAsync(UpsertDespesaDto upsertDespesaDto)
     {
         Despesa despesa = _mapper.Map<Despesa>(upsertDespesaDto);

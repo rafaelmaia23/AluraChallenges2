@@ -1,7 +1,9 @@
 ﻿using AluraChallenges2.Models.Dtos;
+using AluraChallenges2.Services;
 using AluraChallenges2.Services.IServices;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace AluraChallenges2.Controllers;
 
@@ -37,6 +39,15 @@ public class DespesaController : ControllerBase
     public async Task<IActionResult> GetDespesaByIdAsync(string id)
     {
         Result<ReadDespesaDto> result = await _despesaService.GetDespesaByIdAsync(id);
+        if (result.IsFailed) return NotFound();
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{ano}/{mes}")]
+    public async Task<IActionResult> GetDespesasByMonthAsync(int ano, [Range(1, 12)] int mes)
+    {
+        if (ano < 1990 || ano > DateTime.Now.Year) return BadRequest("Ano inválido");
+        Result<List<ReadDespesaDto>> result = await _despesaService.GetDespesasByMonthAsync(ano, mes);
         if (result.IsFailed) return NotFound();
         return Ok(result.Value);
     }
