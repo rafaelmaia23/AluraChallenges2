@@ -2,6 +2,7 @@
 using AluraChallenges2.Services.IServices;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace AluraChallenges2.Controllers;
 
@@ -37,6 +38,15 @@ public class ReceitaController : ControllerBase
     public async Task<IActionResult> GetReceitaByIdAsync(string id)
     {
         Result<ReadReceitaDto> result = await _receitaService.GetReceitaByIdAsync(id);
+        if (result.IsFailed) return NotFound();
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{ano}/{mes}")]
+    public async Task<IActionResult> GetReceitasByMonth(int ano, [Range(1,12)]int mes)
+    {
+        if (ano < 1990 || ano > DateTime.Now.Year) return BadRequest("Ano inválido");
+        Result<List<ReadReceitaDto>> result = await _receitaService.GetReceitasByMonth(ano, mes);
         if (result.IsFailed) return NotFound();
         return Ok(result.Value);
     }

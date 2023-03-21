@@ -49,6 +49,15 @@ public class ReceitaService : IReceitaService
         return Result.Ok(readReceitaDtos);
     }
 
+    public async Task<Result<List<ReadReceitaDto>>> GetReceitasByMonth(int ano, int mes)
+    {
+        List<Receita> receitas = await _appDbContext.Receitas
+            .Where(r => r.Data.Year == ano && r.Data.Month == mes).ToListAsync();
+        if (receitas.Count == 0) return Result.Fail("Not Found");
+        List<ReadReceitaDto> readReceitaDtos = _mapper.Map<List<ReadReceitaDto>>(receitas);
+        return Result.Ok(readReceitaDtos);
+    }
+
     public async Task<Result<ReadReceitaDto>> PostReceitaAsync(UpsertReceitaDto upsertReceitaDto)
     {        
         Receita receita = _mapper.Map<Receita>(upsertReceitaDto);
