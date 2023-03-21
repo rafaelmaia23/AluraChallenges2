@@ -1,5 +1,7 @@
-﻿namespace AluraChallenges2.Services;
+﻿using AluraChallenges2.Services.IServices;
 
-public class ResumoService
+namespace AluraChallenges2.Services;
+
+public class ResumoService : IResumoService
 {
 }

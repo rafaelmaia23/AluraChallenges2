@@ -15,6 +15,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IReceitaService, ReceitaService>();
 builder.Services.AddScoped<IDespesaService, DespesaService>();
+builder.Services.AddScoped<IResumoService, ResumoService>();
 
 builder.Services.AddSwaggerGen();
 
