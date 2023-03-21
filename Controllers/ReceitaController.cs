@@ -25,9 +25,9 @@ public class ReceitaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetReceitasAsync()
+    public async Task<IActionResult> GetReceitasAsync([FromQuery] string? descricao = null)
     {
-        Result<List<ReadReceitaDto>> result = await _receitaService.GetReceitasAsync();
+        Result<List<ReadReceitaDto>> result = await _receitaService.GetReceitasAsync(descricao);
         if (result.IsFailed) return NotFound();
         return Ok(result.Value);
     }

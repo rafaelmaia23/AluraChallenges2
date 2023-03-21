@@ -36,9 +36,14 @@ public class ReceitaService : IReceitaService
         return Result.Ok(readReceitaDto);
     }
 
-    public async Task<Result<List<ReadReceitaDto>>> GetReceitasAsync()
+    public async Task<Result<List<ReadReceitaDto>>> GetReceitasAsync(string? descricao)
     {
-        List<Receita> receitas = await _appDbContext.Receitas.ToListAsync();
+        List<Receita> receitas = new();
+        if (!String.IsNullOrEmpty(descricao))
+        {
+            receitas = await _appDbContext.Receitas.Where(r => r.Descricao.Contains(descricao)).ToListAsync();
+        }
+        else receitas = await _appDbContext.Receitas.ToListAsync();
         if (receitas.Count == 0) return Result.Fail("Not Found");
         List<ReadReceitaDto> readReceitaDtos = _mapper.Map<List<ReadReceitaDto>>(receitas);
         return Result.Ok(readReceitaDtos);
