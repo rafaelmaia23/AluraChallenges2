@@ -36,9 +36,15 @@ public class DespesaService : IDespesaService
         return Result.Ok(readDespesaDto);
     }
 
-    public async Task<Result<List<ReadDespesaDto>>> GetDespesasAsync()
+    public async Task<Result<List<ReadDespesaDto>>> GetDespesasAsync(string? descricao)
     {
-        List<Despesa> despesas = await _appDbContext.Despesas.Include(d => d.Categoria).ToListAsync();
+        List<Despesa> despesas = new();
+        if (!String.IsNullOrEmpty(descricao))
+        {
+            despesas = await _appDbContext.Despesas.Where(d => d.Descricao.Contains(descricao))
+                .Include(d => d.Categoria).ToListAsync();
+        }
+        else despesas = await _appDbContext.Despesas.Include(d => d.Categoria).ToListAsync();
         if (despesas.Count == 0) return Result.Fail("Not Found");
         List<ReadDespesaDto> readDespesaDtos = _mapper.Map<List<ReadDespesaDto>>(despesas);
         return Result.Ok(readDespesaDtos);

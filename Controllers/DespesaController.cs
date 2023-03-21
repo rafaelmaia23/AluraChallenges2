@@ -25,9 +25,9 @@ public class DespesaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetDespesasAsync()
-    {
-        Result<List<ReadDespesaDto>> result = await _despesaService.GetDespesasAsync();
+    public async Task<IActionResult> GetDespesasAsync([FromQuery] string? descricao = null)
+     {
+        Result<List<ReadDespesaDto>> result = await _despesaService.GetDespesasAsync(descricao);
         if (result.IsFailed) return NotFound();
         return Ok(result.Value);
     }
